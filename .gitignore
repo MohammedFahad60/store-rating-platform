@@ -1,0 +1,89 @@
+# ==============================
+# Dependencies
+# ==============================
+**/node_modules/
+
+# ==============================
+# Environment / Secrets
+# ==============================
+.env
+.env.*
+!.env.example
+
+# ==============================
+# Build / Production Output
+# ==============================
+**/dist/
+**/build/
+**/coverage/
+**/.vite/
+
+# ==============================
+# Logs
+# ==============================
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# ==============================
+# Test / Temporary Files
+# ==============================
+**/test-results/
+**/playwright-report/
+**/blob-report/
+**/.cache/
+**/tmp/
+**/temp/
+
+# ==============================
+# Databases / Local Data
+# ==============================
+*.db
+*.sqlite
+*.sqlite3
+*.db-shm
+*.db-wal
+
+# ==============================
+# OS Files
+# ==============================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ==============================
+# Windows
+# ==============================
+*.stackdump
+
+# ==============================
+# IDE / Editors
+# ==============================
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# ==============================
+# Temporary / Backup Files
+# ==============================
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*~
+
+# ==============================
+# Environment-specific deployment files
+# ==============================
+.vercel/
+.netlify/
+
+# ==============================
+# Miscellaneous
+# ==============================
+.DS_Store

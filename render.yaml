@@ -1,0 +1,74 @@
+# Render blueprint for STORE Platform — https://render.com/docs/blueprint-spec
+# This file is declarative infrastructure-as-code. No secrets are committed;
+# secret values are set as sync:false and must be added in the Render
+# dashboard (Environment → Environment Variables) or via `render env`.
+#
+# Apply: connect the GitHub repo to Render and click "Apply" (or `render blueprint apply`).
+# The preDeployCommand runs migrations before the first healthy deploy.
+
+services:
+  - type: web
+    name: store-api
+    runtime: node
+    plan: starter
+    rootDir: Backend
+    buildCommand: npm ci --ignore-scripts=false
+    startCommand: NODE_ENV=production node server.js
+    healthCheckPath: /api/health
+    autoDeploy: false
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: DB_HOST
+        sync: false
+      - key: DB_PORT
+        value: 3306
+      - key: DB_NAME
+        sync: false
+      - key: DB_USER
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: CLIENT_URL
+        sync: false
+      - key: JWT_EXPIRES_IN
+        value: 1d
+    # Run migrations before the service becomes healthy. Render supports a
+    # preDeployCommand (or use a separate `render job` from CI).
+    preDeployCommand: npm run db:migrate
+
+  # Optional: static frontend on Render (alternative to Vercel/Netlify)
+  - type: web
+    name: store-web
+    runtime: static
+    rootDir: Frontend
+    buildCommand: npm ci && VITE_API_URL=https://store-api.onrender.com/api npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_URL
+        sync: false
+    routes:
+      - type: rewrite
+        source: /api/*
+        destination: https://store-api.onrender.com/api/*
+      - type: rewrite
+        source: /*
+        destination: /index.html
+
+databases:
+  # Managed MySQL 8 — Render's managed MySQL (or use an external provider
+  # such as AWS RDS / PlanetScale / Aiven and point DB_* at it separately).
+  - name: store-mysql
+    plan: starter
+    databaseName: store_rating_db
+    # The created database is accessed via the service's internal host;
+    # map it to DB_* in the web service above. charset/collation are set
+    # by the migration system (utf8mb4/utf8mb4_unicode_ci).
+
+# Note: If you use an external MySQL (RDS, PlanetScale, Railway MySQL),
+# remove the `databases:` section above and point DB_HOST/DB_PORT/DB_NAME/
+# DB_USER/DB_PASSWORD at that external instance instead.
