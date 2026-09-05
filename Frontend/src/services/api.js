@@ -8,7 +8,10 @@ import { getToken, clearSession } from "../utils/auth";
 //   Vite dev server proxies /api to the backend (see vite.config.js); in
 //   production this requires the frontend and API to share an origin (or a
 //   reverse proxy routing /api to the backend).
-const baseURL = (import.meta.env.VITE_API_URL || "/api").replace(/\/$/, "");
+const baseURL = (
+  import.meta.env.VITE_API_URL ||
+  "https://store-rating-platform-v34v.onrender.com/api"
+).replace(/\/$/, "");
 
 const api = axios.create({
   baseURL,
